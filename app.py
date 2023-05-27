@@ -16,11 +16,24 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 def hello_world():
     return "<p>This is my Songlist!</p>"
 
+#Data inquiry method
 def data_fetch(query):
     cur = mysql.connection.cursor()
     cur.execute(query)
     data = cur.fetchall()
     return data
+
+#GET method to pull songs from the table
+@app.route("/songs", methods=["GET"])
+def get_songs():
+    data = data_fetch("""SELECT * FROM songs""")
+    return make_response(jsonify(data), 200)
+
+#GET method to pull songs from table via release year
+@app.route("/songs/<int:id>/year", methods=["GET"])
+def get_songs_by_year(id):
+    data = data_fetch("""SELECT * FROM songs where release_year={}""".format(id))
+    return make_response(jsonify({data}), 200)
 
 #Using POST method on the songs directory
 @app.route("/songs", methods=['POST'])
