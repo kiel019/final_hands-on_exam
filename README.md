@@ -2,4 +2,6 @@
 Final hands-on exam for IT6
 
 This is my final hands-on project for the subject IT6.
-In this project, we can 
+In this project, we can preview, add, and manipulate the database 'songlist' using python.
+
+
