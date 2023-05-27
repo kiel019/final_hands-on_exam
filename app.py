@@ -51,6 +51,19 @@ def add_song():
     cur.close()
     return make_response(jsonify({"message": "Song added successfully"}), 201)
 
+@app.route("/songs/<int:id>", methods=["PUT"])
+def update_song(id):
+    cur = mysql.connection.cursor()
+    json = request.get_json()
+    title = json["title"]
+    artist = json["artist"]
+    album = json["album"]
+    release_year = json["release_year"]
+    cur.execute(""" UPDATE song SET title = %s, artist = %s, album = %s, release_year = %s WHERE id = %s""", (title, artist, album, release_year, id))
+    mysql.connection.commit()
+    cur.close()
+    return make_response(jsonify({"message": "song updated successfully"}), 200)
+
 #Run the python file
 if __name__ == "__main__":
     app.run(debug=True)
