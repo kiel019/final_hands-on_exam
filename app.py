@@ -4,7 +4,7 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
-#Setting up MySQL
+#MySQL Setup
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_PASSWORD'] = 'apzx0dfd6'
@@ -30,11 +30,6 @@ def get_songs():
     data = data_fetch("""SELECT * FROM songs""")
     return make_response(jsonify(data), 200)
 
-#GET method to pull songs from table via release year
-@app.route("/songs/<int:id>/year", methods=["GET"])
-def get_songs_by_year(id):
-    data = data_fetch("""SELECT * FROM songs where release_year={}""".format(id))
-    return make_response(jsonify({data}), 200)
 
 #Using POST method on the songs directory
 @app.route("/songs", methods=['POST'])
