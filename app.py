@@ -59,10 +59,18 @@ def update_song(id):
     artist = json["artist"]
     album = json["album"]
     release_year = json["release_year"]
-    cur.execute(""" UPDATE song SET title = %s, artist = %s, album = %s, release_year = %s WHERE id = %s""", (title, artist, album, release_year, id))
+    cur.execute(""" UPDATE songs SET title = %s, artist = %s, album = %s, release_year = %s WHERE id = %s""", (title, artist, album, release_year, id))
     mysql.connection.commit()
     cur.close()
     return make_response(jsonify({"message": "song updated successfully"}), 200)
+
+@app.route("/songs/<int:id>", methods=["DELETE"])
+def delete_song(id):
+    cur = mysql.connection.cursor()
+    cur.execute(""" DELETE FROM songs WHERE id = %s""", (id))
+    mysql.connection.commit()
+    cur.close()
+    return make_response(jsonify({"message": "song deleted successfully"}), 200)
 
 #Run the python file
 if __name__ == "__main__":
