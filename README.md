@@ -24,6 +24,8 @@ How to Use:
 ******************************************************************************************
 Documentation:
 get_songs() returns the values present in the songs table
+get_songs_by_id() returns a value present in the songs table
+    Format: localhost:5000/songs/<song id>
 add_song() adds a song to the songs table in the database. 
     Format: 
     {

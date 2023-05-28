@@ -30,6 +30,12 @@ def get_songs():
     data = data_fetch("""SELECT * FROM songs""")
     return make_response(jsonify(data), 200)
 
+#GET method to pull one entry from table using song id
+@app.route("/songs/<int:id>", methods=["GET"])
+def get_songs_by_id(id):
+    data = data_fetch("""SELECT * FROM songs WHERE id = {}""".format(id))
+    return make_response(jsonify(data), 200)
+    
 
 #Using POST method on the songs directory
 @app.route("/songs", methods=['POST'])
