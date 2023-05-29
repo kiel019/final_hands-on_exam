@@ -1,9 +1,20 @@
-from flask import Flask, make_response, jsonify, request, Response
+from flask import Flask, make_response, jsonify, Response, request
 from flaskext.mysql import MySQL
 from flask_mysqldb import MySQL
+from flask_httpauth import HTTPBasicAuth
 
 app = Flask(__name__)
 fmt = "json"
+auth = HTTPBasicAuth()
+
+USER_DATA = {"admin": "admin"}
+
+@auth.verify_password
+def verify(username, password):
+    if not (username and password):
+        return False
+    return USER_DATA.get(username) == password
+
 #MySQL Setup
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_HOST'] = 'localhost'
@@ -26,6 +37,7 @@ def data_fetch(query):
 
 #GET method to pull songs from the table
 @app.route("/songs", methods=["GET"])
+@auth.login_required
 def get_songs():
     try:
         data = data_fetch("""SELECT * FROM songs""")
@@ -41,6 +53,7 @@ def get_songs():
 
 #GET method to pull one entry from table using song id
 @app.route("/songs/<int:id>", methods=["GET"])
+@auth.login_required
 def get_songs_by_id(id):
     try:
         data = data_fetch("""SELECT * FROM songs WHERE id = {}""".format(id))
@@ -57,6 +70,7 @@ def get_songs_by_id(id):
 
 #GET method to pull an entry from table using parameters
 @app.route("/songs/param", methods=["GET"])
+@auth.login_required
 def get_songs_by_param():
     try:
         _name = request.args.get('name')
@@ -83,6 +97,7 @@ def get_songs_by_param():
 
 #Using POST method on the songs directory
 @app.route("/songs", methods=['POST'])
+@auth.login_required
 def add_song():
     try:
         cur = mysql.connection.cursor()
@@ -106,6 +121,7 @@ def add_song():
 
 #Use PUT method to update a song in database
 @app.route("/songs/<int:id>", methods=["PUT"])
+@auth.login_required
 def update_song_by_id(id):
     try:
         cur = mysql.connection.cursor()
@@ -131,6 +147,7 @@ def update_song_by_id(id):
 
 #Use DELETE method to remove a song in the database
 @app.route("/songs/<int:id>", methods=["DELETE"])
+@auth.login_required
 def delete_song(id):
     try:
         cur = mysql.connection.cursor()

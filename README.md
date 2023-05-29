@@ -14,7 +14,7 @@ Postman
 ******************************************************************************************
 How to Use:
 1. Create a virtual env 
-2. Pip install Flask and flask_mysqldb
+2. Pip install Flask, flask_mysqldb, flask_httpauth
 3. Use sql file to create a database
 4. Open app.py
 5. Replace MySQL setup information to your own MySQL info
@@ -31,6 +31,7 @@ get_songs_by_id() returns a value present in the songs table
 
 get_songs_by_param() returns a value in the table using specific criteria
     Format: localhost:5000/songs/param?name=<criteria>&param=<paramter for criteria>&format=<can be json, xml, or blank>
+    
     ex: localhost:5000/songs/param?name=title&param="my songs"&format=json
         localhost:5000/songs/param?name=release_year&param=1971&format=
 
