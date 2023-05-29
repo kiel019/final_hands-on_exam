@@ -30,3 +30,17 @@ VALUES
 ("Can't Stop the Feeling!", 'Justin Timberlake', 'Trolls', 2016);
 
 select * from songs
+
+--@block
+CREATE table users(
+    id int primary key auto_increment,
+    username varchar(255) not null,
+    pass varchar(255) not null
+);
+
+--@block
+INSERT INTO users(username, _pass)
+VALUES('admin', 'admin')
+
+--@block
+DROP 
