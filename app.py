@@ -55,12 +55,38 @@ def get_songs_by_id(id):
         print(ex)
     
 
+#GET method to pull an entry from table using parameters
+@app.route("/songs/param", methods=["GET"])
+def get_songs_by_param():
+    try:
+        _name = request.args.get('name')
+        _param = request.args.get('param')
+        if _name == "id":
+            data = data_fetch("""SELECT * FROM songs WHERE id ={}""".format(_param))
+        elif _name == "release_year":
+            data = data_fetch("""SELECT * FROM songs WHERE release_year ={}""".format(_param))
+        elif _name == "title":
+            data = data_fetch("""SELECT * FROM songs WHERE title ={}""".format(_param))
+        elif _name == "artist":
+            data = data_fetch("""SELECT * FROM songs WHERE artist ={}""".format(_param))
+        elif _name == "album":
+            data = data_fetch("""SELECT * FROM songs WHERE album ={}""".format(_param))
+        fmt = request.args.get('format')
+        myResponse = make_response(jsonify(data))
+        if fmt.lower() == "xml":
+            myResponse.mimetype = 'xml'
+        else:
+            myResponse.mimetype = 'json'
+        return myResponse
+    except Exception as ex:
+        print(ex)
+
 #Using POST method on the songs directory
 @app.route("/songs", methods=['POST'])
 def add_song():
     try:
         cur = mysql.connection.cursor()
-        json = request.get_json()
+        json = request.get_json(force=True)
         title = json["title"]
         artist = json["artist"]
         album = json["album"]
@@ -69,7 +95,9 @@ def add_song():
             """ INSERT INTO songs (title, artist, album, release_year) VALUE (%s, %s, %s, %s)""", (title, artist, album, release_year),
         )
         mysql.connection.commit()
-        return make_response(jsonify({"message": "Song added successfully"}), 201)
+        _response = jsonify("Song added successfully!")
+        _response.status_code = 200
+        return _response
     except Exception as ex:
         print(ex)
     finally:
@@ -81,7 +109,7 @@ def add_song():
 def update_song_by_id(id):
     try:
         cur = mysql.connection.cursor()
-        json = request.get_json()
+        json = request.get_json(force=True)
         title = json["title"]
         artist = json["artist"]
         album = json["album"]
@@ -90,11 +118,15 @@ def update_song_by_id(id):
         bindData = (title, artist, album, release_year, id)
         cur.execute(sqlQuery, bindData)
         mysql.connection.commit()
-        return make_response(jsonify({"message": "song updated successfully"}), 204)
+        _response = jsonify("Song updated successfully!")
+        _response.status_code = 200
+        return _response
     except Exception as ex:
         print(ex)
     finally:
         cur.close()
+        
+        
     
 
 #Use DELETE method to remove a song in the database
