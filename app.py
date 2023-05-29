@@ -1,10 +1,9 @@
-from flask import Flask, make_response, jsonify, request
+from flask import Flask, make_response, jsonify, request, Response
 from flaskext.mysql import MySQL
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
-_format = "json"
-
+fmt = "json"
 #MySQL Setup
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_HOST'] = 'localhost'
@@ -30,10 +29,13 @@ def data_fetch(query):
 def get_songs():
     try:
         data = data_fetch("""SELECT * FROM songs""")
-        if (_format == "json"):
-            return make_response(jsonify(data), 200)
-        elif (_format == "xml"):
-            return make_response()
+        fmt = request.args.get('format')
+        myResponse = make_response(jsonify(data))
+        if fmt.lower() == "xml":
+            myResponse.mimetype = 'xml'
+        else:
+            myResponse.mimetype = 'json'
+        return myResponse
     except Exception as ex:
         print(ex)
 
@@ -42,7 +44,13 @@ def get_songs():
 def get_songs_by_id(id):
     try:
         data = data_fetch("""SELECT * FROM songs WHERE id = {}""".format(id))
-        return make_response(jsonify(data), 200)
+        fmt = request.args.get('format')
+        myResponse = make_response(jsonify(data))
+        if fmt.lower() == "xml":
+            myResponse.mimetype = 'xml'
+        else:
+            myResponse.mimetype = 'json'
+        return myResponse
     except Exception as ex:
         print(ex)
     
@@ -102,12 +110,15 @@ def delete_song(id):
     finally:
         cur.close()
     
-
 @app.route("/songs/format", methods=["GET"])
 def get_params():
-    fmt = request.args.get('id')
-    return make_response(jsonify({"format": fmt}),200)
-
+    try:
+        fmt = "json"
+        fmt = request.args.get('id')
+        return Response(fmt, mimetype=fmt)
+    except Exception as ex:
+        print(ex)
+        
 #Run the python file
 if __name__ == "__main__":
     app.run(debug=True)
