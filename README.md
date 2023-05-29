@@ -36,7 +36,8 @@ get_songs_by_param() returns a value in the table using specific criteria
         localhost:5000/songs/param?name=release_year&param=1971&format=
 
 add_song() adds a song to the songs table in the database. 
-    Format: 
+    
+    ex:
     {
         "title": "song title",
         "artist": "artist name",
@@ -46,6 +47,9 @@ add_song() adds a song to the songs table in the database.
 
 update_song_by_id() updates information to a song in the database
     Format: localhost:5000/songs/<song id>
+    
+    ex:
+    localhost:5000/songs/<24>
     {
         "title": "song title",
         "artist": "artist name",
