@@ -24,8 +24,11 @@ How to Use:
 ******************************************************************************************
 Documentation:
 get_songs() returns the values present in the songs table
+    Format: localhost:5000/songs?format=<can be json or xml>
+
 get_songs_by_id() returns a value present in the songs table
-    Format: localhost:5000/songs/<song id>
+    Format: localhost:5000/songs/<song id>?format=<can be json or xml>
+
 add_song() adds a song to the songs table in the database. 
     Format: 
     {
@@ -34,6 +37,7 @@ add_song() adds a song to the songs table in the database.
         "album": "album title",
         "release_year": year
     }
+
 update_song_by_id() updates information to a song in the database
     Format: localhost:5000/songs/<song id>
     {
@@ -42,7 +46,6 @@ update_song_by_id() updates information to a song in the database
         "album": "album title",
         "release_year": year
     }
+
 delete_song() deletes a song in the database via song id
     Format: localhost:5000/songs/<song id>
-get_params() gets user parameters for endpoint uri format. Default json.
-    Format: localhost:5000/songs/format?id=<xml/json>

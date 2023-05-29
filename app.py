@@ -109,16 +109,7 @@ def delete_song(id):
         print(ex)
     finally:
         cur.close()
-    
-@app.route("/songs/format", methods=["GET"])
-def get_params():
-    try:
-        fmt = "json"
-        fmt = request.args.get('id')
-        return Response(fmt, mimetype=fmt)
-    except Exception as ex:
-        print(ex)
-        
+
 #Run the python file
 if __name__ == "__main__":
     app.run(debug=True)
